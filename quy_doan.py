@@ -38,6 +38,7 @@ class app:
 		self.nam_chi=StringVar()
 		self.chi_moi=StringVar()
 		self.lydochi=StringVar()
+		self.chuc_c=StringVar()
 
 		self.T1=StringVar()
 		self.T2=StringVar()
@@ -73,6 +74,7 @@ class app:
 			pass
 		self.menu()
 		self.search_lop()
+		self.search_cv()
 
 	def pro_search_lop(self):
 		sv_root=Tk()
@@ -118,10 +120,60 @@ class app:
 			tree_sv.insert("", "end", values=(sv[0], sv[1], sv[2], sv[3], sv[4], sv[5], sv[6], sv[7], sv[8], sv[9], sv[10]))
 
 	def search_lop(self):
-		Label(self.root, text="Tìm theo lớp: ").place(x=945-200-50-50, y=400-10)
+		Label(self.root, text="Tìm theo lớp: ", bg="#c5eafc").place(x=945-200-50-50, y=400-10)
 		Entry(self.root, textvariable=self.malop_c, width=24).place(x=945+85-200-50-50, y=400-10)
-		Button(self.root, text="Tìm", width=5, command=self.pro_search_lop).place(x=1190-305, y=400-1-10)
+		Button(self.root, text="Tìm", bg='black', fg='white', width=5, command=self.pro_search_lop).place(x=1190-305, y=400-1-10)
 	
+	def pro_search_chuccv(self):
+		sv_root=Tk()
+		sv_root.minsize(width=950, height=400)
+		sv_root.resizable(False, False)
+		tree_sv=ttk.Treeview(sv_root, height=18, selectmode="browse")
+		tree_sv.place(x=2, y=2)
+		vsb=Scrollbar(sv_root, orient="vertical", command=tree_sv.yview)
+		vsb.place(x=931, y=2, height=390)
+		tree_sv.configure(yscrollcommand=vsb.set)
+		# horbar=Scrollbar(root)
+		tree_sv["column"]=('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10')
+		tree_sv['show']="headings"
+		tree_sv.column('0', width=55, anchor="w")
+		tree_sv.column('1', width=150, anchor="w")
+		tree_sv.column('2', width=80, anchor="w")
+		tree_sv.column('3', width=60, anchor="w")
+		tree_sv.column('4', width=80, anchor="w")
+		tree_sv.column('5', width=80, anchor="w")
+		tree_sv.column('6', width=80, anchor="w")
+		tree_sv.column('7', width=80, anchor="w")
+		tree_sv.column('8', width=80, anchor="w")
+		tree_sv.column('9', width=88, anchor="w")
+		tree_sv.column('10', width=80, anchor="w")	
+
+		tree_sv.heading('0', text="MASV", anchor='w')
+		tree_sv.heading('1', text="Họ tên", anchor='w')
+		tree_sv.heading('2', text="Ngày Sinh", anchor='w')
+		tree_sv.heading('3', text="Giới tính", anchor='w')
+		tree_sv.heading('4', text="Quê Quán", anchor='w')
+		tree_sv.heading('5', text="Dân tộc", anchor='w')
+		tree_sv.heading('6', text="Tôn giáo", anchor='w')
+		tree_sv.heading('7', text="NVĐoàn", anchor='w')
+		tree_sv.heading('8', text="NVĐảng", anchor='w')
+		tree_sv.heading('9', text="Chức vụ", anchor='w')
+		tree_sv.heading('10', text="Lớp", anchor='w')
+
+		# tree_sv.bind("<KeyPress-Delete>", delete)
+		db=sqlite3.connect('data_.db')
+		cur=db.cursor()
+		cur.execute("SELECT* FROM THANHVIEN WHERE CHUCVU='{0}'".format(self.chuc_c.get()))
+		for sv in cur:
+			tree_sv.insert("", "end", values=(sv[0], sv[1], sv[2], sv[3], sv[4], sv[5], sv[6], sv[7], sv[8], sv[9], sv[10]))
+
+	
+	def search_cv(self):
+		Label(self.root, text="Tìm theo chức vụ: ", bg="#c5eafc").place(x=15, y=400-10)
+		Entry(self.root, textvariable=self.chuc_c, width=24).place(x=200, y=400-10)
+		Button(self.root, text="Tìm", bg='black', fg='white', width=5, command=self.pro_search_chuccv).place(x=350, y=400-1-10)
+
+
 
 	def chi_quy_windows(self):
 		chi_root=Tk()
@@ -169,20 +221,20 @@ class app:
 		self.__init__(self.root, self.year)
 
 	def menu(self):		
-		Label(self.root, text="Tiền chi: ").place(x=945, y=540-1)
+		Label(self.root, text="Tiền chi: ", bg="#c5eafc").place(x=945, y=540-1)
 		Entry(self.root, textvariable=self.chi_moi, width=24).place(x=945+85, y=540-1)
 
-		Button(self.root, text="Quỹ đã chi", width=25,command=self.chi_quy_windows).place(x=1040, y=660)
-		Label(self.root, text="Ngày chi: ").place(x=945, y=570)
+		Button(self.root, text="Quỹ đã chi", bg='black', fg='white', width=25,command=self.chi_quy_windows).place(x=1040, y=660)
+		Label(self.root, text="Ngày chi: ", bg="#c5eafc").place(x=945, y=570)
 		Entry(self.root, textvariable=self.ngay_chi, width=4).place(x=85+945, y=570)
-		Label(self.root, text="/").place(x=100+15+945, y=570)
+		Label(self.root, text="/", bg="#c5eafc").place(x=100+15+945, y=570)
 		Entry(self.root, textvariable=self.thang_chi, width=4).place(x=115+15+945, y=570)
-		Label(self.root, text='/').place(x=165+945, y=570)
+		Label(self.root, text='/', bg="#c5eafc").place(x=165+945, y=570)
 		Entry(self.root, textvariable=self.nam_chi, width=8).place(x=180+945, y=570)
 
-		Label(self.root, text="Lý do chi: ").place(x=2+945, y=600+3)
+		Label(self.root, text="Lý do chi: ", bg="#c5eafc").place(x=2+945, y=600+3)
 		Entry(self.root, textvariable=self.lydochi, width=24).place(x=85+945, y=600+1)
-		Button(self.root, text="Chi", width=5, height=5, command=self.insert).place(x=1170, y=540-4)
+		Button(self.root, text="Chi", bg='black', fg='white', width=5, height=5, command=self.insert).place(x=1170, y=540-4)
 	def add_year(self):
 		cur=self.db.cursor()
 		cur.execute("INSERT INTO TONGQUY VALUES({0},0,0);".format(self.new_year.get()))
@@ -194,9 +246,9 @@ class app:
 		self.db.commit()
 		self.__init__(self.root, self.year)
 	def add_new_year(self):
-		Label(self.root, text="Thêm năm mới: ").place(x=600, y=30)
+		Label(self.root, text="Thêm năm mới: ", bg="#c5eafc", font=("Times", 14, "bold")).place(x=612, y=30)
 		Entry(self.root, width=8, textvariable=self.new_year).place(x=750, y=30)
-		Button(self.root, text="Thêm", command=self.add_year).place(x=800, y=28)
+		Button(self.root, text="Thêm", bg='black', fg='white', command=self.add_year).place(x=800, y=28)
 	
 	def year_process(self, event):
 		self.time=datetime.datetime.today()
@@ -212,9 +264,9 @@ class app:
 		years=[y[0] for y in years]
 		self.var.set(years[0])
 		opt=OptionMenu(self.root, self.var, *years, command=self.year_process)
-		opt.config(width=5)
+		opt.config(width=5, bg='white')
 
-		opt.place(x=900, y=28)
+		opt.place(x=872, y=28)
 
 
 	def top_content(self):
@@ -222,21 +274,21 @@ class app:
 		cur.execute("SELECT TONGTHU, TONGCHI FROM TONGQUY WHERE NAM='{0}';".format(self.year))
 		# print(cur.fetchall())
 		thu=cur.fetchall()[0][0]
-		Label(self.root, text="ĐÃ THU: ").place(x=15, y=30)
-		Label(self.root, text="                ").place(x=60, y=30)
-		Label(self.root, text="{0}".format(thu)).place(x=60, y=30)
+		Label(self.root, text="ĐÃ THU: ", bg="#c5eafc", font=("Times", 14, "bold")).place(x=15, y=30)
+		Label(self.root, text="                ", bg="#c5eafc", font=("Times", 14, "bold")).place(x=95, y=30)
+		Label(self.root, text="{0}".format(thu), bg="#c5eafc", font=("Times", 14, "bold")).place(x=95, y=30)
 
 		cur.execute("SELECT TONGTHU, TONGCHI FROM TONGQUY WHERE NAM='{0}';".format(self.year))
 		chi=cur.fetchall()[0][1]
-		Label(self.root, text="ĐÃ CHI: ").place(x=215, y=30)
-		Label(self.root, text="                 ").place(x=260, y=30)
-		Label(self.root, text="{0}".format(chi)).place(x=260, y=30)
+		Label(self.root, text="ĐÃ CHI: ", bg="#c5eafc", font=("Times", 14, "bold")).place(x=215, y=30)
+		Label(self.root, text="                 ", bg="#c5eafc", font=("Times", 14, "bold")).place(x=285, y=30)
+		Label(self.root, text="{0}".format(chi), bg="#c5eafc", font=("Times", 14, "bold")).place(x=285, y=30)
 
 		cur.execute("SELECT TONGTHU, TONGCHI FROM TONGQUY WHERE NAM='{0}';".format(self.year))
 		
-		Label(self.root, text="HIỆN CÓ: ").place(x=415, y=30)
-		Label(self.root, text="                  ").place(x=480, y=30)
-		Label(self.root, text="{0}".format(thu-chi)).place(x=480, y=30)
+		Label(self.root, text="HIỆN CÓ: ", bg="#c5eafc", font=("Times", 14, "bold")).place(x=415, y=30)
+		Label(self.root, text="                  ", bg="#c5eafc", font=("Times", 14, "bold")).place(x=515, y=30)
+		Label(self.root, text="{0}".format(thu-chi), bg="#c5eafc", font=("Times", 14, "bold")).place(x=515, y=30)
 
 	def add_quy(self):
 		cursor=self.db.cursor()
@@ -260,10 +312,10 @@ class app:
 	def select(self, event):
 		self.clone=list(self.tree.item(self.tree.selection(), "values"))
 
-		masv=Label(self.root, text=str(self.clone[0]), fg="RED")
+		masv=Label(self.root, text=str(self.clone[0]), fg="RED", bg="#c5eafc")
 		masv.place(x=15, y=660)
 
-		tensv=Label(self.root, text=str(self.clone[1]), fg="RED")
+		tensv=Label(self.root, text=str(self.clone[1]), fg="RED", bg="#c5eafc")
 		tensv.place(x=70, y=660)
 
 		t1=Entry(self.root, textvariable=self.T1)
@@ -303,7 +355,7 @@ class app:
 		t12.insert(END, self.clone[13])
 		t12.place(x=873, y=660)
 
-		Button(self.root, text="Thay đổi", command=self.add_quy).place(x=945, y=660+1)
+		Button(self.root, text="Thay đổi", bg="black", fg='white', command=self.add_quy).place(x=945, y=660+1)
 
 	def clone_thay_doi(self):
 		t1=Entry(self.root, textvariable=self.T1)
@@ -330,7 +382,7 @@ class app:
 		t11.place(x=814, y=660)
 		t12=Entry(self.root, width=7, textvariable=self.T12)
 		t12.place(x=873, y=660)
-		Button(self.root, text="Thay đổi").place(x=945, y=660+1)
+		Button(self.root, text="Thay đổi", bg="black", fg='white').place(x=945, y=660+1)
 
 
 	def delete(self, event):
@@ -381,7 +433,7 @@ class app:
 
 		self.tree.bind("<Double-1>", self.select)
 		cursor=self.db.cursor()
-		cursor.execute("SELECT T.MASV, TENSV, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12 FROM CHITIETTHU AS C INNER JOIN THANHVIEN AS T ON T.MASV=C.MASV WHERE YEAR={0};".format(self.year))
+		cursor.execute("SELECT DISTINCT T.MASV, TENSV, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12 FROM CHITIETTHU AS C INNER JOIN THANHVIEN AS T ON T.MASV=C.MASV WHERE YEAR={0};".format(self.year))
 		for hh in cursor:
 			self.tree.insert("", "end", values=("{0}".format(hh[0]), "{0}".format(hh[1]), "{0}".format(hh[2]), "{0}".format(hh[3]), "{0}".format(hh[4]), "{0}".format(hh[5]), "{0}".format(hh[6]), "{0}".format(hh[7]), "{0}".format(hh[8]), "{0}".format(hh[9]), "{0}".format(hh[10]),"{0}".format(hh[11]),"{0}".format(hh[12]), "{0}".format(hh[13])))
 
@@ -449,54 +501,54 @@ class app:
 
 		self.__init__(self.root, self.year)
 	def nhap_tv(self):
-		Label(self.root, text="Họ tên: ").place(x=945, y=130-70)
-		Entry(self.root, width=24, textvariable=self.in_hoten).place(x=1000, y=130-70)
+		Label(self.root, text="Họ tên: ", bg="#c5eafc").place(x=945+5, y=130-70)
+		Entry(self.root, width=24, textvariable=self.in_hoten).place(x=1000+5, y=130-70)
 		
-		Label(self.root, text="MaSV:").place(x=945, y=160-70)
+		Label(self.root, text="MaSV:", bg="#c5eafc").place(x=945+5, y=160-70)
 		Entry(self.root, width=8, textvariable=self.in_masv).place(x=1000, y=160-70)
-		Label(self.root, text="Lớp:").place(x=945+100+5, y=160-70)
-		Entry(self.root, width=10, textvariable=self.in_lop).place(x=1000+80+5-1, y=160-70)
+		Label(self.root, text="Lớp:", bg="#c5eafc").place(x=945+100+5+5, y=160-70)
+		Entry(self.root, width=10, textvariable=self.in_lop).place(x=1000+80+5-1+5, y=160-70)
 		
-		Label(self.root, text="Ngày sinh:").place(x=945, y=190-70)
-		Entry(self.root, width=4, textvariable=self.in_ngay).place(x=1000+5, y=190-70)
-		Label(self.root, text="/").place(x=1030, y=190-70)
-		Entry(self.root, width=4, textvariable=self.in_thang).place(x=1000+50-10+5, y=190-70)
-		Label(self.root, text="/").place(x=1080, y=190-70)
-		Entry(self.root, width=8, textvariable=self.in_nam).place(x=1000+100+5-10, y=190-70)
+		Label(self.root, text="Ngày sinh:", bg="#c5eafc").place(x=945+5, y=190-70)
+		Entry(self.root, width=4, textvariable=self.in_ngay).place(x=1000+5+5, y=190-70)
+		Label(self.root, text="/", bg="#c5eafc").place(x=1030+5, y=190-70)
+		Entry(self.root, width=4, textvariable=self.in_thang).place(x=1000+50+5-10+5, y=190-70)
+		Label(self.root, text="/", bg="#c5eafc").place(x=1080+5, y=190-70)
+		Entry(self.root, width=8, textvariable=self.in_nam).place(x=1000+100+5-10+5, y=190-70)
 
-		Label(self.root, text="Giới tính:").place(x=945, y=220-70)
-		Label(self.root, text="Nam").place(x=1025, y=220-70)
-		Radiobutton(self.root, variable=self.in_gioitinh, value="Nam").place(x=1000, y=220-70)
-		Label(self.root, text="Nữ").place(x=1025+100, y=220-70)
-		Radiobutton(self.root, variable=self.in_gioitinh, value="Nữ").place(x=1000+100, y=220-70)
+		Label(self.root, text="Giới tính:", bg="#c5eafc").place(x=945+5, y=220-70)
+		Label(self.root, text="Nam", bg="#c5eafc").place(x=1025+5, y=220-70)
+		Radiobutton(self.root, variable=self.in_gioitinh, value="Nam", bg="#c5eafc").place(x=1000+5, y=220-70)
+		Label(self.root, text="Nữ", bg="#c5eafc").place(x=1025+100+5, y=220-70)
+		Radiobutton(self.root, variable=self.in_gioitinh, value="Nữ", bg="#c5eafc").place(x=1000+100+5, y=220-70)
 
-		Label(self.root, text="Quê quán: ").place(x=945, y=250-70)
-		Entry(self.root, textvariable=self.in_quequan).place(x=1025, y=250-70)
+		Label(self.root, text="Quê quán: ", bg="#c5eafc").place(x=945+5, y=250-70)
+		Entry(self.root, textvariable=self.in_quequan).place(x=1025+5, y=250-70)
 
-		Label(self.root, text="Dân tộc").place(x=945, y=280-70)
-		Entry(self.root, textvariable=self.in_dantoc).place(x=1025, y=280-70)
+		Label(self.root, text="Dân tộc", bg="#c5eafc").place(x=945+5, y=280-70)
+		Entry(self.root, textvariable=self.in_dantoc).place(x=1025+5, y=280-70)
 
-		Label(self.root, text="Tôn giáo").place(x=945, y=310-70)
-		Entry(self.root, textvariable=self.in_tongiao).place(x=1025, y=310-70)
+		Label(self.root, text="Tôn giáo", bg="#c5eafc").place(x=945+5, y=310-70)
+		Entry(self.root, textvariable=self.in_tongiao).place(x=1025+5, y=310-70)
 
-		Label(self.root, text="NvĐoàn:").place(x=945, y=340-70)
-		Entry(self.root, width=4, textvariable=self.in_ngay_doan).place(x=1000+5, y=340-70)
-		Label(self.root, text="/").place(x=1030, y=340-70)
-		Entry(self.root, width=4, textvariable=self.in_thang_doan).place(x=1000+50-10+5, y=340-70)
-		Label(self.root, text="/").place(x=1080, y=340-70)
-		Entry(self.root, width=8, textvariable=self.in_nam_doan).place(x=1000+100+5-10, y=340-70)
+		Label(self.root, text="NvĐoàn:", bg="#c5eafc").place(x=945+5, y=340-70)
+		Entry(self.root, width=4, textvariable=self.in_ngay_doan).place(x=1000+5+5, y=340-70)
+		Label(self.root, text="/", bg="#c5eafc").place(x=1030+5, y=340-70)
+		Entry(self.root, width=4, textvariable=self.in_thang_doan).place(x=1000+50-10+5+5, y=340-70)
+		Label(self.root, text="/", bg="#c5eafc").place(x=1080+5, y=340-70)
+		Entry(self.root, width=8, textvariable=self.in_nam_doan).place(x=1000+100+5-10+5, y=340-70)
 
-		Label(self.root, text="NvĐảng:").place(x=945, y=370-70)
-		Entry(self.root, width=4, textvariable=self.in_ngay_dang).place(x=1000+5, y=370-70)
-		Label(self.root, text="/").place(x=1030, y=370-70)
-		Entry(self.root, width=4, textvariable=self.in_thang_dang).place(x=1000+50-10+5, y=370-70)
-		Label(self.root, text="/").place(x=1080, y=370-70)
-		Entry(self.root, width=8, textvariable=self.in_nam_dang).place(x=1000+100+5-10, y=370-70)
+		Label(self.root, text="NvĐảng:", bg="#c5eafc").place(x=945+5, y=370-70)
+		Entry(self.root, width=4, textvariable=self.in_ngay_dang).place(x=1000+5+5, y=370-70)
+		Label(self.root, text="/",bg="#c5eafc").place(x=1030+5, y=370-70)
+		Entry(self.root, width=4, textvariable=self.in_thang_dang).place(x=1000+50-10+5+5, y=370-70)
+		Label(self.root, text="/",bg="#c5eafc").place(x=1080+5, y=370-70)
+		Entry(self.root, width=8, textvariable=self.in_nam_dang).place(x=1000+100+5-10+5, y=370-70)
 
-		Label(self.root, text="Chức vụ:").place(x=945, y=400-70)
-		Entry(self.root, textvariable=self.in_chucvu).place(x=1025, y=400-70)
+		Label(self.root, text="Chức vụ:", bg="#c5eafc").place(x=945+5, y=400-70)
+		Entry(self.root, textvariable=self.in_chucvu).place(x=1025+5, y=400-70)
 
-		Button(self.root, text="THÊM", command=self.them_sv).place(x=1080+26, y=400-50)
+		Button(self.root, text="THÊM", bg="black", fg="white", command=self.them_sv).place(x=1080+26+5, y=400-50)
 
 	def database(self):
 		cur=self.db.cursor()
@@ -561,6 +613,8 @@ class app:
 
 
 root=Tk()
+root.title("Quản lý Đoàn khoa CNTT")
+root.configure(bg="#c5eafc")
 root.minsize(1230, 690)
 a=app(root, 2020)
 root.mainloop()
